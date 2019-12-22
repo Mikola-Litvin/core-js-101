@@ -27,8 +27,13 @@
  *  21 => 'Fizz'
  *
  */
-function getFizzBuzz(/* num */) {
-  throw new Error('Not implemented');
+function getFizzBuzz(num) {
+  let result;
+  if (num % 3 === 0 && num % 5 === 0) result = 'FizzBuzz';
+  else if (num % 3 === 0) result = 'Fizz';
+  else if (num % 5 === 0) result = 'Buzz';
+  else result = num;
+  return result;
 }
 
 
@@ -43,8 +48,8 @@ function getFizzBuzz(/* num */) {
  *   5  => 120
  *   10 => 3628800
  */
-function getFactorial(/* n */) {
-  throw new Error('Not implemented');
+function getFactorial(n) {
+  return (n !== 1) ? n * getFactorial(n - 1) : 1;
 }
 
 
@@ -60,8 +65,14 @@ function getFactorial(/* n */) {
  *   5,10  =>  45 ( = 5+6+7+8+9+10 )
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
-function getSumBetweenNumbers(/* n1, n2 */) {
-  throw new Error('Not implemented');
+function getSumBetweenNumbers(n1, n2) {
+  let i = n1;
+  let sum = n1;
+  while (i < n2) {
+    i += 1;
+    sum += i;
+  }
+  return sum;
 }
 
 
@@ -80,8 +91,8 @@ function getSumBetweenNumbers(/* n1, n2 */) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+  return (a + b > c && a + c > b && b + c > a);
 }
 
 
@@ -117,8 +128,10 @@ function isTriangle(/* a, b, c */) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
+function doRectanglesOverlap(rect1, rect2) {
+  if ((rect2.top > rect1.height || rect2.left > rect1.width)
+  || (rect1.top > rect2.height || rect1.left > rect2.width)) return false;
+  return true;
 }
 
 
@@ -148,8 +161,10 @@ function doRectanglesOverlap(/* rect1, rect2 */) {
  *   { center: { x:0, y:0 }, radius:10 },  { x:10, y:10 }   => false
  *
  */
-function isInsideCircle(/* circle, point */) {
-  throw new Error('Not implemented');
+function isInsideCircle(circle, point) {
+  const isInside = (circle.center.x - point.x) ** 2 + (circle.center.y - point.y) ** 2;
+  if (isInside < circle.radius * circle.radius) return true;
+  return false;
 }
 
 
@@ -164,8 +179,15 @@ function isInsideCircle(/* circle, point */) {
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
-function findFirstSingleChar(/* str */) {
-  throw new Error('Not implemented');
+function findFirstSingleChar(str) {
+  let res;
+  for (let i = 0; i < str.length; i += 1) {
+    const regexp = new RegExp(`${str[i]}`, 'g');
+    const arr = str.match(regexp);
+    if (arr.length === 1) return str[i];
+    res = null;
+  }
+  return res;
 }
 
 
@@ -208,8 +230,9 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  const arr = str.split('');
+  return arr.reverse().join('');
 }
 
 
@@ -225,8 +248,10 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  const str = String(num);
+  const arr = str.split('');
+  return Number(arr.reverse().join(''));
 }
 
 
@@ -294,8 +319,33 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
+function isBracketsBalanced(str, bracketsConfig = [['(', ')'], ['[', ']'], ['{', '}'], ['<', '>']]) {
+  const openBrackets = [];
+  const closeBrackets = [];
+  const stack = [];
+
+  for (let i = 0; i < bracketsConfig.length; i += 1) {
+    openBrackets.push(bracketsConfig[i][0]);
+    closeBrackets.push(bracketsConfig[i][1]);
+  }
+
+  for (let i = 0; i < str.length; i += 1) {
+    if (openBrackets.indexOf(str[i]) !== -1 && closeBrackets.indexOf(str[i]) === -1) {
+      stack.push(str[i]);
+    } else if (openBrackets.indexOf(str[i]) !== -1 && closeBrackets.indexOf(str[i]) !== -1) {
+      if (stack[stack.length - 1] === str[i]) {
+        stack.pop();
+      } else {
+        stack.push(str[i]);
+      }
+    } else if (closeBrackets.indexOf(str[i]) !== -1 && openBrackets.indexOf(str[i]) === -1) {
+      if (openBrackets.indexOf(stack.pop()) !== closeBrackets.indexOf(str[i])) return false;
+    }
+  }
+  if (stack.length !== 0) {
+    return false;
+  }
+  return true;
 }
 
 
